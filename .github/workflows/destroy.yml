@@ -1,0 +1,43 @@
+name: Terragrunt Destroy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment to destroy (dev, integration, prod)'
+        required: true
+        default: dev
+
+jobs:
+  destroy:
+    name: Destroy Infrastructure
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::922858306127:role/GitHubActionsRole
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install Terraform and Terragrunt
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y unzip
+          curl -Lo terraform.zip https://releases.hashicorp.com/terraform/1.6.6/terraform_1.6.6_linux_amd64.zip
+          unzip terraform.zip && sudo mv terraform /usr/local/bin/
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.55.14/terragrunt_linux_amd64
+          chmod +x terragrunt && sudo mv terragrunt /usr/local/bin/
+
+      - name: Destroy Environment
+        run: |
+          ENVIRONMENT=${{ github.event.inputs.environment }}
+          echo "Destroying environment: $ENVIRONMENT"
+          cd infra/envs/$ENVIRONMENT
+          terragrunt run-all destroy --non-interactive --terragrunt-parallelism=1
