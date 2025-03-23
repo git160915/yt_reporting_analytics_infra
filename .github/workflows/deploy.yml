@@ -3,12 +3,11 @@ name: Terragrunt Deploy
 on:
   push:
     branches:
-      - main
       - dev
       - integration
       - prod
     paths:
-      - 'infra/**'
+      - 'src/**'
 
 jobs:
   deploy:
