@@ -16,7 +16,7 @@ CLIENT_ID="sts.amazonaws.com"
 
 # --- Functions ---
 
-function delete_oidc_provider() {
+delete_oidc_provider() {
   echo "Attempting to delete OIDC provider with ARN $OIDC_ARN..."
   if aws iam get-open-id-connect-provider --open-id-connect-provider-arn "$OIDC_ARN" &>/dev/null; then
     aws iam delete-open-id-connect-provider --open-id-connect-provider-arn "$OIDC_ARN"
@@ -26,7 +26,7 @@ function delete_oidc_provider() {
   fi
 }
 
-function create_oidc_provider() {
+create_oidc_provider() {
   echo "Creating OIDC provider for GitHub Actions..."
   aws iam create-open-id-connect-provider \
     --url "$OIDC_URL" \
@@ -35,7 +35,7 @@ function create_oidc_provider() {
   echo "OIDC provider created successfully."
 }
 
-function delete_role_if_exists() {
+delete_role_if_exists() {
   if aws iam get-role --role-name "$ROLE_NAME" &>/dev/null; then
     echo "Role $ROLE_NAME exists. Deleting inline policies and then the role..."
 
@@ -61,7 +61,7 @@ function delete_role_if_exists() {
   fi
 }
 
-function create_role() {
+create_role() {
   echo "Creating role $ROLE_NAME..."
 
   TRUST_POLICY=$(cat <<EOF
@@ -93,20 +93,37 @@ EOF
   echo "Role $ROLE_NAME created successfully."
 }
 
-function attach_inline_policy() {
+attach_inline_policy() {
   echo "Attaching inline policy $POLICY_NAME to role $ROLE_NAME..."
 
-  # Comprehensive inline policy as provided:
+  # Comprehensive inline policy including all required IAM, S3, EC2, VPC, SSM, logging actions,
+  # plus additional IAM permissions: iam:ListInstanceProfilesForRole.
   POLICY_DOCUMENT=$(cat <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "EC2Permissions",
+      "Sid": "AllowS3StateBucketActions",
       "Effect": "Allow",
       "Action": [
-        "ec2:*"
+        "s3:ListBucket",
+        "s3:GetBucketVersioning",
+        "s3:GetBucketPolicy",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetEncryptionConfiguration",
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:DeleteObject"
       ],
+      "Resource": [
+        "arn:aws:s3:::${BUCKET_NAME}",
+        "arn:aws:s3:::${BUCKET_NAME}/*"
+      ]
+    },
+    {
+      "Sid": "EC2Permissions",
+      "Effect": "Allow",
+      "Action": "ec2:*",
       "Resource": "*"
     },
     {
@@ -161,16 +178,18 @@ function attach_inline_policy() {
         "iam:AddRoleToInstanceProfile",
         "iam:RemoveRoleFromInstanceProfile",
         "iam:GetRole",
-        "iam:ListInstanceProfiles"
+        "iam:ListInstanceProfiles",
+        "iam:ListRolePolicies",
+        "iam:ListAttachedRolePolicies",
+        "iam:GetInstanceProfile",
+        "iam:ListInstanceProfilesForRole"
       ],
       "Resource": "*"
     },
     {
       "Sid": "SSMPermissions",
       "Effect": "Allow",
-      "Action": [
-        "ssm:*"
-      ],
+      "Action": "ssm:*",
       "Resource": "*"
     },
     {
@@ -195,22 +214,16 @@ EOF
   echo "Inline policy attached successfully."
 }
 
-# --- Main Script ---
+# --- Main Script Execution ---
 
-# Check if --recreate or -r flag is provided
 if [[ "${1:-}" == "--recreate" || "${1:-}" == "-r" ]]; then
   echo "Recreate flag detected. Deleting existing role and OIDC provider if present..."
   delete_role_if_exists
   delete_oidc_provider
 fi
 
-# Create the OIDC provider (if it doesn't exist or was deleted)
 create_oidc_provider
-
-# Create the role
 create_role
-
-# Attach the inline policy
 attach_inline_policy
 
 echo "All operations completed successfully."
