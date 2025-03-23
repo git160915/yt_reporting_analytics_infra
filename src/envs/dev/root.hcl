@@ -1,5 +1,5 @@
 locals {
-  region      = "ap-southeast-2"
+  region      = get_env("AWS_REGION", "ap-southeast-2")
   environment = "dev"
 }
 

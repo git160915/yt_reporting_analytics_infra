@@ -1,5 +1,10 @@
 include {
-  path = find_in_parent_folders()
+  path = find_in_parent_folders("root.hcl")
+}
+
+locals {
+  region = get_env("AWS_REGION", "ap-southeast-2")
+  environment = "dev"
 }
 
 dependency "vpc" {
@@ -25,8 +30,8 @@ remote_state {
   backend = "s3"
   config = {
     bucket         = "my-terraform-state-bucket-yt-rpt-ana-infra"
-    key            = "dev/ssm.tfstate"
-    region         = "ap-southeast-2"
+    key            = "${local.environment}/ssm.tfstate"
+    region         = local.region
     encrypt        = true
     dynamodb_table = "terraform-lock"
   }
