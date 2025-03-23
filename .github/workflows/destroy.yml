@@ -39,5 +39,5 @@ jobs:
         run: |
           ENVIRONMENT=${{ github.event.inputs.environment }}
           echo "Destroying environment: $ENVIRONMENT"
-          cd infra/envs/$ENVIRONMENT
+          cd src/envs/$ENVIRONMENT
           terragrunt run-all destroy --non-interactive --terragrunt-parallelism=1
