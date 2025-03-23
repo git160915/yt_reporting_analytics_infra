@@ -1,0 +1,48 @@
+{
+  // Name displayed in the VS Code Remote-Containers panel
+  "name": "Python YouTube Data/Analytics Dev",
+
+  "build": {"dockerfile": "Dockerfile.python"},
+
+  // Use a pre-built Python dev container image (Debian-based)
+  // "image": "mcr.microsoft.com/devcontainers/python:3.10-bullseye",
+
+  // Optional: add or customize any features or packages
+  "features": {
+    // If you want to install other devcontainer features, you can specify them here.
+    // For example: "ghcr.io/devcontainers/features/node:1": {}
+    "ghcr.io/devcontainers/features/aws-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers-contrib/features/terragrunt:1": {
+      "version": "latest"
+    }
+  },
+
+  // VS Code-specific settings & extensions
+  "customizations": {
+    "vscode": {
+      "settings": {
+        // Ensures VS Code uses the container’s Python
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      },
+      "extensions": [
+        "ms-python.python",       // Python extension
+        "ms-python.vscode-pylance" // Language server for Python
+      ]
+    }
+  },
+
+  // Run commands after the container is created
+  "postCreateCommand": "pip install --upgrade pip && pip install google-api-python-client google-auth google-auth-httplib2 google-auth-oauthlib requests && /bin/bash /workspaces/yt_reporting_analytics_infra/.devcontainer/setup-sm.sh && terraform --version",
+
+  // Use the 'vscode' user (created by the base container image) to avoid root
+  "remoteUser": "vscode",
+
+  "runArgs": [
+		"--network=default-bridge"
+	]
+}

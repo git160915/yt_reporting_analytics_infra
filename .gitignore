@@ -35,3 +35,46 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Terraform local state files and backups
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Terraform state files and backups
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate.backup
+
+# Sensitive variable files (if not managed securely)
+*.tfvars
+*.tfvars.json
+
+# Terraform directories (cache and plugins)
+.terraform/
+**/.terraform/
+
+# Terragrunt cache directories
+.terragrunt-cache/
+**/.terragrunt-cache/
+
+# Crash logs and temporary logs
+crash.log
+crash.*.log
+*.log
+
+# Local override files (if any)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# VS Code DevContainers (if you want to ignore temporary files within the devcontainer)
+.devcontainer/tmp/
