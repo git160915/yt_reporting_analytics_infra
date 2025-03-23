@@ -49,5 +49,5 @@ jobs:
         run: |
           ENVIRONMENT=${{ steps.set-env.outputs.env }}
           echo "Deploying environment components from src/envs/${ENVIRONMENT}/components"
-          terragrunt run-all init --non-interactive --terragrunt-working-dir "src/envs/${ENVIRONMENT}/components"
-          terragrunt run-all apply --non-interactive --parallelism=1 --terragrunt-working-dir "src/envs/${ENVIRONMENT}/components"
+          terragrunt run-all init --non-interactive --working-dir "src/envs/${ENVIRONMENT}/components"
+          terragrunt run-all apply --non-interactive --parallelism=1 --working-dir "src/envs/${ENVIRONMENT}/components"
