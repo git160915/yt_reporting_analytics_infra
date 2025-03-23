@@ -43,6 +43,7 @@ dependencies {
 inputs = {
   # ami_id                = "ami-0c02fb55956c7d316"
   instance_type         = "t2.micro"
+  instance_name         = "${local.environment}-ResponsibleInstance"
   responsible_subnet_id = dependency.vpc.outputs.responsible_subnet_id
   security_group_id     = dependency.security.outputs.sg_id
   instance_profile_name = dependency.ssm.outputs.ssm_instance_profile

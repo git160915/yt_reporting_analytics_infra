@@ -1,6 +1,6 @@
 resource "aws_security_group" "instance" {
-  name        = "ec2-private-sg"
-  description = "Allow necessary internal traffic"
+  name        = var.security_group_name
+  description = "Security group for EC2 instances in ${var.security_group_name}"
   vpc_id      = var.vpc_id
 
   ingress {
@@ -16,5 +16,9 @@ resource "aws_security_group" "instance" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = var.security_group_name
   }
 }

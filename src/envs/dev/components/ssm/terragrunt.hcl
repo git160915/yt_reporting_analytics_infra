@@ -12,7 +12,7 @@ dependency "vpc" {
   mock_outputs = {
     vpc_id               = "mock-vpc-id",
     private_subnet_id    = "mock-private-subnet-id",
-    responsible_subnet_id = "mock-responsible-subnet-id"
+    responsible_subnet_id = "mock-responsible-subnet-id",
   }
 }
 
@@ -24,6 +24,8 @@ terraform {
 inputs = {
   # For example, if you need the VPC id for tagging:
   vpc_id = dependency.vpc.outputs.vpc_id
+  ec2_ssm_role_name = "${local.environment}_ec2_ssm_role_name"
+  ec2_ssm_instance_profile_name = "${local.environment}_ec2_ssm_instance_profile_name"
 }
 
 remote_state {

@@ -13,3 +13,7 @@ variable "security_group_id" {
 variable "instance_profile_name" {
   type = string
 }
+variable "instance_name" {
+  description = "The name to assign to the EC2 instance"
+  type        = string
+}

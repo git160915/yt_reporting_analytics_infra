@@ -23,6 +23,6 @@ resource "aws_instance" "responsible_instance" {
               EOF
 
   tags = {
-    Name = "ResponsibleInstance"
+    Name = var.instance_name
   }
 }

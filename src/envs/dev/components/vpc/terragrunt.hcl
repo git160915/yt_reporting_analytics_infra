@@ -13,6 +13,8 @@ terraform {
 
 inputs = {
   cidr_block = "10.0.0.0/16"
+  vpc_name    = "${local.environment}-vpc"
+  subnet_name = "${local.environment}-subnet"
 }
 
 remote_state {

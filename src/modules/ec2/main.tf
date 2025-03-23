@@ -23,6 +23,6 @@ resource "aws_instance" "python_ec2" {
               EOF
 
   tags = {
-    Name = "PythonEC2Instance"
+    Name = var.instance_name
   }
 }

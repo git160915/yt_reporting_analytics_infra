@@ -23,7 +23,8 @@ dependencies {
 }
 
 inputs = {
-  vpc_id = dependency.vpc.outputs.vpc_id
+  vpc_id              = dependency.vpc.outputs.vpc_id
+  security_group_name = "${local.environment}-ec2-private-sg"
 }
 
 remote_state {
