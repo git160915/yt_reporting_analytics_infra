@@ -13,3 +13,10 @@ remote_state {
     dynamodb_table = "terraform-lock"
   }
 }
+
+terraform {
+  extra_arguments "auto_approve_destroy" {
+    commands  = ["destroy"]
+    arguments = ["-auto-approve"]
+  }
+}
