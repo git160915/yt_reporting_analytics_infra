@@ -16,6 +16,8 @@ cat <<EOF > github-actions-policy.json
       "Effect": "Allow",
       "Action": [
         "s3:ListBucket",
+        "s3:GetBucketTagging",
+        "s3:PutBucketTagging",
         "s3:GetBucketVersioning",
         "s3:GetBucketPolicy",
         "s3:GetBucketPublicAccessBlock",
