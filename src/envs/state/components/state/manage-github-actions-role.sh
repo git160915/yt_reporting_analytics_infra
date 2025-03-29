@@ -120,7 +120,9 @@ attach_inline_policy() {
         "s3:GetBucketAcl",
         "s3:PutBucketAcl",
         "s3:GetBucketCors",
-        "s3:PutBucketCors"
+        "s3:PutBucketCors",
+        "s3:GetBucketWebsite",
+        "s3:PutBucketWebsite"
       ],
       "Resource": "*"
     },
