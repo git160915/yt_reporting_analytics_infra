@@ -7,5 +7,7 @@ variable "table_name" {
 }
 
 variable "environment" {
-  type = string
+  description = "A prefix to apply to resource names to differentiate environments"
+  type        = string
+  default     = ""
 }

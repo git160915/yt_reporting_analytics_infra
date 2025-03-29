@@ -1,6 +1,11 @@
 locals {
-  region      = "ap-southeast-2"
-  environment = "dev"
+  region      = get_env("AWS_REGION", "ap-southeast-2")
+  environment = "integration"
+
+  tags = {
+    Environment = local.environment
+    Owner       = "Platform Team"
+  }
 }
 
 remote_state {
@@ -11,12 +16,5 @@ remote_state {
     region         = local.region
     encrypt        = true
     dynamodb_table = "terraform-lock"
-  }
-}
-
-terraform {
-  extra_arguments "auto_approve_destroy" {
-    commands  = ["destroy"]
-    arguments = ["-auto-approve"]
   }
 }

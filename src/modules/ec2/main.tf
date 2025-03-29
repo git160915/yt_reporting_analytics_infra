@@ -15,14 +15,24 @@ resource "aws_instance" "python_ec2" {
   vpc_security_group_ids = [var.security_group_id]
   iam_instance_profile   = var.instance_profile_name
 
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+    # Optionally set the hop limit (default is 1; increase if needed)
+    http_put_response_hop_limit = 2
+  }
+
   user_data = <<-EOF
               #!/bin/bash
               sudo yum update -y
-              sudo yum install -y python3
+              sudo yum install -y python3 amazon-ssm-agent
+              # Start the SSM Agent service and enable it to start on boot
+              systemctl start amazon-ssm-agent
+              systemctl enable amazon-ssm-agent
               echo "print('Hello from EC2')" > /home/ec2-user/hello.py
               EOF
 
   tags = {
-    Name = "PythonEC2Instance"
+    Name = "${var.environment}-PythonEC2Instance"
   }
 }
