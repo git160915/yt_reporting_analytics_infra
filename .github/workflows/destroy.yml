@@ -46,7 +46,7 @@ jobs:
           echo "Destroying environment: $ENVIRONMENT"
           cd src/envs/$ENVIRONMENT
           if [ "${{ github.event.inputs.queue_exclude_s3 }}" == "true" ]; then
-            terragrunt run-all destroy --non-interactive --parallelism=1 --queue-exclude-dir "components/s3"'
+            terragrunt run-all destroy --non-interactive --parallelism=1 --queue-exclude-dir "components/s3"
           else
             terragrunt run-all destroy --non-interactive --parallelism=1 
           fi
