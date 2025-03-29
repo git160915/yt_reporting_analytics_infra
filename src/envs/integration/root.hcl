@@ -1,6 +1,11 @@
 locals {
   region      = get_env("AWS_REGION", "ap-southeast-2")
   environment = "integration"
+
+  tags = {
+    Environment = local.environment
+    Owner       = "Platform Team"
+  }
 }
 
 remote_state {

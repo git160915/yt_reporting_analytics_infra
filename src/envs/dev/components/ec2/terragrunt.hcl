@@ -3,8 +3,9 @@ include {
 }
 
 locals {
-  region = get_env("AWS_REGION", "ap-southeast-2")
-  environment = "dev"
+  env_vars    = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+  region      = local.env_vars.locals.region
+  environment = local.env_vars.locals.environment
 }
 
 dependency "vpc" {
@@ -42,8 +43,8 @@ dependencies {
 
 inputs = {
   # ami_id                = "ami-0c02fb55956c7d316"
+  environment           = local.environment
   instance_type         = "t2.micro"
-  instance_name         = "${local.environment}-PythonEC2Instance"
   private_subnet_id     = dependency.vpc.outputs.private_subnet_id
   security_group_id     = dependency.security.outputs.sg_id
   instance_profile_name = dependency.ssm.outputs.ssm_instance_profile

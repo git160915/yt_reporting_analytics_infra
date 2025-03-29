@@ -3,8 +3,9 @@ include {
 }
 
 locals {
-  region = get_env("AWS_REGION", "ap-southeast-2")
-  environment = "dev"
+  env_vars    = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+  region      = local.env_vars.locals.region
+  environment = local.env_vars.locals.environment
 }
 
 terraform {
@@ -12,9 +13,8 @@ terraform {
 }
 
 inputs = {
-  cidr_block = "10.0.0.0/16"
-  vpc_name    = "${local.environment}-vpc"
-  subnet_name = "${local.environment}-subnet"
+  cidr_block  = "10.0.0.0/16"
+  environment = local.environment
 }
 
 remote_state {

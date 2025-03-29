@@ -3,8 +3,9 @@ include {
 }
 
 locals {
-  region = get_env("AWS_REGION", "ap-southeast-2")
-  environment = "dev"
+  env_vars    = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+  region      = local.env_vars.locals.region
+  environment = local.env_vars.locals.environment
 }
 
 dependency "vpc" {
@@ -23,9 +24,8 @@ terraform {
 # Use dependency outputs if needed; otherwise, the SSM module should not try to manage VPC resources.
 inputs = {
   # For example, if you need the VPC id for tagging:
-  vpc_id = dependency.vpc.outputs.vpc_id
-  ec2_ssm_role_name = "${local.environment}_ec2_ssm_role_name"
-  ec2_ssm_instance_profile_name = "${local.environment}_ec2_ssm_instance_profile_name"
+  environment = local.environment
+  vpc_id      = dependency.vpc.outputs.vpc_id
 }
 
 remote_state {

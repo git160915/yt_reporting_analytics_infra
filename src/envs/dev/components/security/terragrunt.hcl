@@ -3,8 +3,9 @@ include {
 }
 
 locals {
-  region = get_env("AWS_REGION", "ap-southeast-2")
-  environment = "dev"
+  env_vars    = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+  region      = local.env_vars.locals.region
+  environment = local.env_vars.locals.environment
 }
 
 dependency "vpc" {
@@ -23,8 +24,8 @@ dependencies {
 }
 
 inputs = {
+  environment         = local.environment
   vpc_id              = dependency.vpc.outputs.vpc_id
-  security_group_name = "${local.environment}-ec2-private-sg"
 }
 
 remote_state {
