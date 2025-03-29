@@ -132,7 +132,9 @@ attach_inline_policy() {
         "s3:GetBucketAcl",
         "s3:PutBucketAcl",
         "s3:GetBucketLogging",
-        "s3:PutBucketLogging"
+        "s3:PutBucketLogging",
+        "s3:GetLifecycleConfiguration",
+        "s3:PutLifecycleConfiguration"
       ],
       "Resource": "*"
     },
