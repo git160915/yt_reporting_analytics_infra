@@ -109,16 +109,16 @@ attach_inline_policy() {
         "s3:ListBucket",
         "s3:GetBucketVersioning",
         "s3:GetBucketPolicy",
+        "s3:PutBucketPolicy",
         "s3:GetBucketPublicAccessBlock",
         "s3:GetEncryptionConfiguration",
+        "s3:GetBucketTagging",
+        "s3:PutBucketTagging",
         "s3:PutObject",
         "s3:GetObject",
         "s3:DeleteObject"
       ],
-      "Resource": [
-        "arn:aws:s3:::${BUCKET_NAME}",
-        "arn:aws:s3:::${BUCKET_NAME}/*"
-      ]
+      "Resource": "*"
     },
     {
       "Sid": "EC2Permissions",
