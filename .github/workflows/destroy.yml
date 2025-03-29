@@ -7,6 +7,10 @@ on:
         description: 'Target environment to destroy (dev, integration, prod)'
         required: true
         default: dev
+      queue_exclude_s3:
+        description: 'Set to "true" to exclude the components/s3 directory'
+        required: true
+        default: "true"
 
 jobs:
   destroy:
@@ -41,4 +45,9 @@ jobs:
           ENVIRONMENT=${{ github.event.inputs.environment }}
           echo "Destroying environment: $ENVIRONMENT"
           cd src/envs/$ENVIRONMENT
-          yes | terragrunt run-all destroy --non-interactive --parallelism=1
+          if [ "${{ github.event.inputs.queue_exclude_s3 }}" == "true" ]; then
+              EXTRA_ARGS='--queue-exclude-dir "components/s3"'
+          else
+              EXTRA_ARGS=""
+          fi
+          eval "yes | terragrunt run-all destroy --non-interactive --parallelism=1 $EXTRA_ARGS"
