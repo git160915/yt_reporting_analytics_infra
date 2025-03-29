@@ -50,4 +50,4 @@ jobs:
           else
               EXTRA_ARGS=""
           fi
-          yes | terragrunt run-all destroy --non-interactive --parallelism=1 $EXTRA_ARGS
+          eval "yes | terragrunt run-all destroy --non-interactive --parallelism=1 $EXTRA_ARGS"
