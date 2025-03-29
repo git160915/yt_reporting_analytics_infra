@@ -122,7 +122,8 @@ attach_inline_policy() {
         "s3:GetBucketCors",
         "s3:PutBucketCors",
         "s3:GetBucketWebsite",
-        "s3:PutBucketWebsite"
+        "s3:PutBucketWebsite",
+        "s3:GetAccelerateConfiguration"
       ],
       "Resource": "*"
     },
