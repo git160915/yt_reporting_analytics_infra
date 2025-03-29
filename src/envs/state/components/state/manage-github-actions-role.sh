@@ -134,7 +134,9 @@ attach_inline_policy() {
         "s3:GetBucketLogging",
         "s3:PutBucketLogging",
         "s3:GetLifecycleConfiguration",
-        "s3:PutLifecycleConfiguration"
+        "s3:PutLifecycleConfiguration",
+        "s3:GetReplicationConfiguration",
+        "s3:GetBucketObjectLockConfiguration"
       ],
       "Resource": "*"
     },
